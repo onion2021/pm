@@ -1,0 +1,334 @@
+{
+  "template_id": "qdm_finished_lot_yield_dashboard_template_zh_cn",
+  "template_key": "qdm_finished_lot_yield_dashboard",
+  "template_name": "QDM Finished Lot 良率看板需求模板",
+  "template_category": "business_requirement",
+  "business_domain": "data_visualization",
+  "language": "zh-CN",
+  "version": "1.0.0",
+  "status": "enabled",
+  "description": "从 D.CHQ.QDM Finished Lot Yield Dashboard 需求文档解析并适配的业务需求模板，覆盖 Finished Lot 良率趋势、产出与损失 KPI、缺陷代码 Pareto、筛选联动、数据契约、良率计算规则、图表清单、UI 规则、技术规格和验收标准。原文中的图片已转换为文字说明。",
+  "tags": [
+    "qdm",
+    "finished-lot",
+    "yield",
+    "dashboard",
+    "defect-pareto",
+    "data-contract"
+  ],
+  "applicable_scenarios": [
+    "Finished Lot 良率看板",
+    "QDM Quality Operation Center 报表",
+    "周 / 月 / 季良率趋势分析",
+    "按缺陷代码分析损失占比和责任部门",
+    "制造良率公式与数据契约确认",
+    "带导出和权限规则的响应式看板实现"
+  ],
+  "render_config": {
+    "format": "markdown",
+    "markdown_relative_path": "data/PRD_template/qdm-finished-lot-yield-dashboard-template.zh-CN.md"
+  },
+  "storage_model": "structured_requirement_template.v1",
+  "sections": [
+    {
+      "section_key": "document_info",
+      "section_title": "基础文档信息",
+      "sort_order": 1,
+      "fields": [
+        {
+          "field_key": "document_info.document_name",
+          "label": "文档名称",
+          "component": "input",
+          "data_type": "string",
+          "required": true,
+          "placeholder": "D.CHQ.QDM Finish Yield Dashboard Requirement"
+        },
+        {
+          "field_key": "document_info.system_module",
+          "label": "系统 / 模块",
+          "component": "input",
+          "data_type": "string",
+          "required": true,
+          "placeholder": "FinishedLot / Quality Operation Center"
+        },
+        {
+          "field_key": "document_info.owner_department",
+          "label": "发起部门",
+          "component": "input",
+          "data_type": "string",
+          "required": true,
+          "placeholder": "QDM"
+        }
+      ]
+    },
+    {
+      "section_key": "background_objectives",
+      "section_title": "背景与目标",
+      "sort_order": 2,
+      "fields": [
+        {
+          "field_key": "background_objectives.background",
+          "label": "业务背景",
+          "component": "textarea",
+          "data_type": "string",
+          "required": true,
+          "placeholder": "说明工厂为什么需要自动化 Finished Lot 良率看板"
+        },
+        {
+          "field_key": "background_objectives.objectives",
+          "label": "目标",
+          "component": "list",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "良率改善、成本下降、产出提升、投资回收加快"
+        }
+      ]
+    },
+    {
+      "section_key": "page_presentation",
+      "section_title": "页面 / 功能呈现",
+      "sort_order": 3,
+      "fields": [
+        {
+          "field_key": "page_presentation.pages",
+          "label": "页面定义",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Finished Lot Performance Overview Trend；Loss Ratio By Defect Code"
+        },
+        {
+          "field_key": "page_presentation.visual_descriptions",
+          "label": "图片替代文字说明",
+          "component": "list",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "用文字描述原始看板截图、筛选区、公式图和计算示例"
+        }
+      ]
+    },
+    {
+      "section_key": "filters_interactions",
+      "section_title": "查询条件与用户交互",
+      "sort_order": 4,
+      "fields": [
+        {
+          "field_key": "filters_interactions.filters",
+          "label": "筛选条件",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Customer、Plant、Date Type、Lot Type、Unit Type、Project Type"
+        },
+        {
+          "field_key": "filters_interactions.rules",
+          "label": "交互规则",
+          "component": "list",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "联动筛选、选中态、tooltip、键盘交互、导出上下文"
+        }
+      ]
+    },
+    {
+      "section_key": "data_contract",
+      "section_title": "数据说明与数据契约",
+      "sort_order": 5,
+      "fields": [
+        {
+          "field_key": "data_contract.sources",
+          "label": "数据来源",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "FinishedLotSummaryData_Internal 和 FinishedLotSummaryDefectData_Internal"
+        },
+        {
+          "field_key": "data_contract.fields",
+          "label": "必要数据字段",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "ATSDate、DateType、LotType、Project Type、Yield、Output_NSQM、DefectCode、DefectQty、Department"
+        },
+        {
+          "field_key": "data_contract.quality_rules",
+          "label": "数据质量规则",
+          "component": "list",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "粒度、刷新频率、筛选项、空值处理、权限范围、对账规则"
+        }
+      ]
+    },
+    {
+      "section_key": "yield_calculation",
+      "section_title": "良率计算逻辑",
+      "sort_order": 6,
+      "fields": [
+        {
+          "field_key": "yield_calculation.definitions",
+          "label": "良率定义",
+          "component": "textarea",
+          "data_type": "string",
+          "required": true,
+          "placeholder": "Finished Yield / Product Yield 定义"
+        },
+        {
+          "field_key": "yield_calculation.formulas",
+          "label": "公式文字说明",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Lot Product Yield；Weekly Product Yield；各工序良率连乘"
+        },
+        {
+          "field_key": "yield_calculation.example",
+          "label": "计算示例",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "PAOI、E-test、CCAOI、Bump、FVI、Inline、Others 的 input/output/loss/yield"
+        }
+      ]
+    },
+    {
+      "section_key": "layout",
+      "section_title": "页面 / 功能布局",
+      "sort_order": 7,
+      "fields": [
+        {
+          "field_key": "layout.options",
+          "label": "布局选项",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Primary-Detail / Hero；Nested / Drill-down；Uniform Grid fallback"
+        }
+      ]
+    },
+    {
+      "section_key": "chart_inventory",
+      "section_title": "图表清单与配置",
+      "sort_order": 8,
+      "fields": [
+        {
+          "field_key": "chart_inventory.charts",
+          "label": "图表",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Finished Overall Trend；Defect Loss Ratio；右侧明细图表"
+        }
+      ]
+    },
+    {
+      "section_key": "stakeholders",
+      "section_title": "责任方与干系人",
+      "sort_order": 9,
+      "fields": [
+        {
+          "field_key": "stakeholders.roles",
+          "label": "干系人",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "业务负责人、PO/BA、数据负责人、UI/UX、前端开发、QA"
+        }
+      ]
+    },
+    {
+      "section_key": "ui_visual_design",
+      "section_title": "UI 与视觉设计要求",
+      "sort_order": 10,
+      "fields": [
+        {
+          "field_key": "ui_visual_design.rules",
+          "label": "UI 规则",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "AITC 风格、色彩系统、字体、间距、面板、响应式状态"
+        }
+      ]
+    },
+    {
+      "section_key": "technical_nonfunctional",
+      "section_title": "技术与非功能需求",
+      "sort_order": 11,
+      "fields": [
+        {
+          "field_key": "technical_nonfunctional.technical_specs",
+          "label": "技术规格",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "前端栈、图表库、响应式、性能、浏览器支持、可维护性、安全"
+        },
+        {
+          "field_key": "technical_nonfunctional.nonfunctional_items",
+          "label": "非功能需求",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "数据准确性、性能、可访问性、可靠性、兼容性、可审计性"
+        }
+      ]
+    },
+    {
+      "section_key": "acceptance_questions",
+      "section_title": "验收标准与待确认问题",
+      "sort_order": 12,
+      "fields": [
+        {
+          "field_key": "acceptance_questions.acceptance_criteria",
+          "label": "验收标准",
+          "component": "list",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "图表清单、指标定义、筛选项、数据准确性、响应式布局、导出、UI 一致性"
+        },
+        {
+          "field_key": "acceptance_questions.open_questions",
+          "label": "待确认问题",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "布局方案、数据源关联键、首发范围、导出权限、刷新 SLA"
+        }
+      ]
+    }
+  ],
+  "prompt_hints": [
+    {
+      "hint_key": "qdm_yield_hint_1",
+      "content": "原文截图已转换为文字描述；需求访谈时应请用户确认这些描述是否等同于最终 UI 意图。"
+    },
+    {
+      "hint_key": "qdm_yield_hint_2",
+      "content": "源文档中 NSQM / NSOM 命名存在不一致迹象；实现前需要确认最终指标标签。"
+    },
+    {
+      "hint_key": "qdm_yield_hint_3",
+      "content": "需要确认良率公式只包含 PAOI、E-test、CCAOI、Bump AOI、FVI，还是也包含计算示例里的 Inline 和 Others。"
+    }
+  ],
+  "prompt_questions": [
+    {
+      "question_key": "qdm_yield_question_1",
+      "content": "首发版本采用哪种布局：Primary-Detail / Hero、Nested drill-down、Uniform Grid，还是其他方案？"
+    },
+    {
+      "question_key": "qdm_yield_question_2",
+      "content": "两张 QDM 源表的最终关联键、筛选字段和查询条件是什么？"
+    },
+    {
+      "question_key": "qdm_yield_question_3",
+      "content": "哪些角色可以导出图表图片或底层数据？"
+    },
+    {
+      "question_key": "qdm_yield_question_4",
+      "content": "页面需要展示什么刷新频率和数据可用性 SLA？"
+    }
+  ]
+}

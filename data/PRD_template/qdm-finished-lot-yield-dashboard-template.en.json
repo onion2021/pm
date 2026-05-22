@@ -1,0 +1,334 @@
+{
+  "template_id": "qdm_finished_lot_yield_dashboard_template_en",
+  "template_key": "qdm_finished_lot_yield_dashboard",
+  "template_name": "QDM Finished Lot Yield Dashboard Requirement Template",
+  "template_category": "business_requirement",
+  "business_domain": "data_visualization",
+  "language": "en",
+  "version": "1.0.0",
+  "status": "enabled",
+  "description": "A business requirement template parsed from the D.CHQ.QDM Finished Lot Yield Dashboard requirement document. It covers finished lot yield trend, output and loss KPIs, defect-code Pareto, filter interactions, data contract, yield calculation rules, chart inventory, UI rules, technical specifications, and acceptance criteria. Original embedded images are represented as text descriptions.",
+  "tags": [
+    "qdm",
+    "finished-lot",
+    "yield",
+    "dashboard",
+    "defect-pareto",
+    "data-contract"
+  ],
+  "applicable_scenarios": [
+    "Finished lot yield dashboard",
+    "QDM quality operation center reporting",
+    "Weekly / monthly / quarterly yield trend analysis",
+    "Defect-code loss ratio Pareto and cause-department analysis",
+    "Manufacturing yield formula and data-contract confirmation",
+    "Responsive dashboard implementation with export and permission rules"
+  ],
+  "render_config": {
+    "format": "markdown",
+    "markdown_relative_path": "data/PRD_template/qdm-finished-lot-yield-dashboard-template.en.md"
+  },
+  "storage_model": "structured_requirement_template.v1",
+  "sections": [
+    {
+      "section_key": "document_info",
+      "section_title": "Basic Document Information",
+      "sort_order": 1,
+      "fields": [
+        {
+          "field_key": "document_info.document_name",
+          "label": "Document name",
+          "component": "input",
+          "data_type": "string",
+          "required": true,
+          "placeholder": "D.CHQ.QDM Finish Yield Dashboard Requirement"
+        },
+        {
+          "field_key": "document_info.system_module",
+          "label": "System / module",
+          "component": "input",
+          "data_type": "string",
+          "required": true,
+          "placeholder": "FinishedLot / Quality Operation Center"
+        },
+        {
+          "field_key": "document_info.owner_department",
+          "label": "Initiating department",
+          "component": "input",
+          "data_type": "string",
+          "required": true,
+          "placeholder": "QDM"
+        }
+      ]
+    },
+    {
+      "section_key": "background_objectives",
+      "section_title": "Background and Objectives",
+      "sort_order": 2,
+      "fields": [
+        {
+          "field_key": "background_objectives.background",
+          "label": "Business background",
+          "component": "textarea",
+          "data_type": "string",
+          "required": true,
+          "placeholder": "Describe why the factory needs an automated finished lot yield dashboard"
+        },
+        {
+          "field_key": "background_objectives.objectives",
+          "label": "Objectives",
+          "component": "list",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Yield improvement, cost reduction, output increase, faster ROI"
+        }
+      ]
+    },
+    {
+      "section_key": "page_presentation",
+      "section_title": "Page / Function Presentation",
+      "sort_order": 3,
+      "fields": [
+        {
+          "field_key": "page_presentation.pages",
+          "label": "Page definitions",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Finished Lot Performance Overview Trend; Loss Ratio By Defect Code"
+        },
+        {
+          "field_key": "page_presentation.visual_descriptions",
+          "label": "Text descriptions replacing screenshots",
+          "component": "list",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Describe the original dashboard screenshots in text"
+        }
+      ]
+    },
+    {
+      "section_key": "filters_interactions",
+      "section_title": "Query Conditions and User Interactions",
+      "sort_order": 4,
+      "fields": [
+        {
+          "field_key": "filters_interactions.filters",
+          "label": "Filters",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Customer, Plant, Date Type, Lot Type, Unit Type, Project Type"
+        },
+        {
+          "field_key": "filters_interactions.rules",
+          "label": "Interaction rules",
+          "component": "list",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Linked filtering, selected state, tooltips, keyboard interaction, export context"
+        }
+      ]
+    },
+    {
+      "section_key": "data_contract",
+      "section_title": "Data Description and Data Contract",
+      "sort_order": 5,
+      "fields": [
+        {
+          "field_key": "data_contract.sources",
+          "label": "Data sources",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "FinishedLotSummaryData_Internal and FinishedLotSummaryDefectData_Internal"
+        },
+        {
+          "field_key": "data_contract.fields",
+          "label": "Required data fields",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "ATSDate, DateType, LotType, Project Type, Yield, Output_NSQM, DefectCode, DefectQty, Department"
+        },
+        {
+          "field_key": "data_contract.quality_rules",
+          "label": "Data quality rules",
+          "component": "list",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Grain, refresh cadence, filters, null handling, permission scope, reconciliation rules"
+        }
+      ]
+    },
+    {
+      "section_key": "yield_calculation",
+      "section_title": "Yield Calculation Logic",
+      "sort_order": 6,
+      "fields": [
+        {
+          "field_key": "yield_calculation.definitions",
+          "label": "Yield definitions",
+          "component": "textarea",
+          "data_type": "string",
+          "required": true,
+          "placeholder": "Finished Yield / Product Yield definition"
+        },
+        {
+          "field_key": "yield_calculation.formulas",
+          "label": "Formula text replacing formula images",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Lot Product Yield; Weekly Product Yield; process yield multiplication"
+        },
+        {
+          "field_key": "yield_calculation.example",
+          "label": "Calculation example",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "PAOI, E-test, CCAOI, Bump, FVI, Inline, Others input/output/loss/yield"
+        }
+      ]
+    },
+    {
+      "section_key": "layout",
+      "section_title": "Page / Function Layout",
+      "sort_order": 7,
+      "fields": [
+        {
+          "field_key": "layout.options",
+          "label": "Layout options",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Primary-Detail / Hero; Nested / Drill-down; Uniform Grid fallback"
+        }
+      ]
+    },
+    {
+      "section_key": "chart_inventory",
+      "section_title": "Chart Inventory and Configuration",
+      "sort_order": 8,
+      "fields": [
+        {
+          "field_key": "chart_inventory.charts",
+          "label": "Charts",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Finished Overall Trend; Defect Loss Ratio; Detail chart on the right"
+        }
+      ]
+    },
+    {
+      "section_key": "stakeholders",
+      "section_title": "Responsible Parties and Stakeholders",
+      "sort_order": 9,
+      "fields": [
+        {
+          "field_key": "stakeholders.roles",
+          "label": "Stakeholders",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Business owner, PO/BA, data owner, UI/UX reviewer, frontend developer, QA tester"
+        }
+      ]
+    },
+    {
+      "section_key": "ui_visual_design",
+      "section_title": "UI and Visual Design Requirements",
+      "sort_order": 10,
+      "fields": [
+        {
+          "field_key": "ui_visual_design.rules",
+          "label": "UI rules",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "AITC style, color system, typography, spacing, panels, responsive states"
+        }
+      ]
+    },
+    {
+      "section_key": "technical_nonfunctional",
+      "section_title": "Technical and Non-functional Requirements",
+      "sort_order": 11,
+      "fields": [
+        {
+          "field_key": "technical_nonfunctional.technical_specs",
+          "label": "Technical specifications",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Frontend stack, chart library, responsiveness, performance, browser support, maintainability, security"
+        },
+        {
+          "field_key": "technical_nonfunctional.nonfunctional_items",
+          "label": "Non-functional requirements",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Data accuracy, performance, accessibility, reliability, compatibility, auditability"
+        }
+      ]
+    },
+    {
+      "section_key": "acceptance_questions",
+      "section_title": "Acceptance Criteria and Open Questions",
+      "sort_order": 12,
+      "fields": [
+        {
+          "field_key": "acceptance_questions.acceptance_criteria",
+          "label": "Acceptance criteria",
+          "component": "list",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Chart list, metric definitions, filters, data accuracy, responsive layout, export, UI compliance"
+        },
+        {
+          "field_key": "acceptance_questions.open_questions",
+          "label": "Open questions",
+          "component": "table",
+          "data_type": "array",
+          "required": true,
+          "placeholder": "Layout approval, source join keys, release scope, export permissions, refresh SLA"
+        }
+      ]
+    }
+  ],
+  "prompt_hints": [
+    {
+      "hint_key": "qdm_yield_hint_1",
+      "content": "The original screenshots were converted to text descriptions; ask the user to confirm whether those descriptions match the intended final UI."
+    },
+    {
+      "hint_key": "qdm_yield_hint_2",
+      "content": "The metric name NSQM / NSOM appears inconsistently in the source; confirm the approved label before implementation."
+    },
+    {
+      "hint_key": "qdm_yield_hint_3",
+      "content": "Confirm whether the yield formula should include only PAOI, E-test, CCAOI, Bump AOI, and FVI, or also Inline and Others as shown in the calculation example."
+    }
+  ],
+  "prompt_questions": [
+    {
+      "question_key": "qdm_yield_question_1",
+      "content": "Which layout is approved for the first release: Primary-Detail / Hero, Nested drill-down, Uniform Grid, or another pattern?"
+    },
+    {
+      "question_key": "qdm_yield_question_2",
+      "content": "What are the final join keys and query filters for the two QDM source tables?"
+    },
+    {
+      "question_key": "qdm_yield_question_3",
+      "content": "Which roles can export chart images or underlying data?"
+    },
+    {
+      "question_key": "qdm_yield_question_4",
+      "content": "What refresh cadence and data availability SLA should be shown on the page?"
+    }
+  ]
+}

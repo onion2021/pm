@@ -1,0 +1,43 @@
+{
+  "template_id": "business_process_requirement_template_ms",
+  "template_key": "business_process_requirement",
+  "template_name": "Templat Keperluan Proses Perniagaan",
+  "template_category": "business_requirement",
+  "business_domain": "business_process",
+  "language": "ms",
+  "version": "1.0.0",
+  "status": "enabled",
+  "description": "Templat untuk permulaan workflow, semakan, kelulusan, tugasan, kebenaran, sejarah audit, integrasi dan penerimaan UAT.",
+  "tags": ["business-process", "workflow", "approval", "permissions", "audit", "uat"],
+  "applicable_scenarios": [
+    "Keperluan workflow atau proses kelulusan",
+    "Senarai tugasan dan sejarah proses",
+    "Kebenaran berasaskan peranan dan kawalan audit",
+    "Validasi proses berasaskan data",
+    "UAT dan sign-off perniagaan",
+    "Pengurusan proses berasaskan konfigurasi"
+  ],
+  "render_config": {
+    "format": "markdown",
+    "markdown_relative_path": "data/PRD_template/business-process-requirement-template.ms.md"
+  },
+  "storage_model": "structured_requirement_template.v1",
+  "sections": [
+    {"section_key": "document_info", "section_title": "Maklumat Dokumen Asas", "sort_order": 1, "fields": [{"field_key": "document_info.summary", "label": "Maklumat dokumen", "component": "textarea", "data_type": "string", "required": true}]},
+    {"section_key": "background_objectives", "section_title": "Latar Belakang dan Objektif", "sort_order": 2, "fields": [{"field_key": "background_objectives.summary", "label": "Latar belakang dan objektif", "component": "textarea", "data_type": "string", "required": true}]},
+    {"section_key": "scope", "section_title": "Skop", "sort_order": 3, "fields": [{"field_key": "scope.items", "label": "Skop", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "stakeholders", "section_title": "Pihak Bertanggungjawab dan Berkepentingan", "sort_order": 4, "fields": [{"field_key": "stakeholders.roles", "label": "Stakeholder", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "data_description", "section_title": "Penerangan Data", "sort_order": 5, "fields": [{"field_key": "data_description.items", "label": "Sumber dan medan data", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "process_description", "section_title": "Penerangan Proses", "sort_order": 6, "fields": [{"field_key": "process_description.steps", "label": "Langkah workflow", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "business_rules", "section_title": "Peraturan Perniagaan", "sort_order": 7, "fields": [{"field_key": "business_rules.rules", "label": "Peraturan perniagaan", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "pages_functions", "section_title": "Persembahan Halaman / Fungsi", "sort_order": 8, "fields": [{"field_key": "pages_functions.pages", "label": "Halaman dan fungsi", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "permissions_controls", "section_title": "Kebenaran dan Kawalan", "sort_order": 9, "fields": [{"field_key": "permissions_controls.matrix", "label": "Matriks kebenaran", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "audit_compliance", "section_title": "Keperluan Audit dan Pematuhan", "sort_order": 10, "fields": [{"field_key": "audit_compliance.requirements", "label": "Audit dan pematuhan", "component": "list", "data_type": "array", "required": true}]},
+    {"section_key": "development_requirements", "section_title": "Keperluan Pembangunan", "sort_order": 11, "fields": [{"field_key": "development_requirements.specs", "label": "Spesifikasi teknikal", "component": "textarea", "data_type": "string", "required": false}]},
+    {"section_key": "integrations", "section_title": "Keperluan Integrasi dan Antara Muka", "sort_order": 12, "fields": [{"field_key": "integrations.interfaces", "label": "Antara muka", "component": "table", "data_type": "array", "required": false}]},
+    {"section_key": "non_functional", "section_title": "Keperluan Bukan Fungsi", "sort_order": 13, "fields": [{"field_key": "non_functional.requirements", "label": "Keperluan bukan fungsi", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "acceptance_testing", "section_title": "Kriteria Penerimaan dan Ujian", "sort_order": 14, "fields": [{"field_key": "acceptance_testing.criteria", "label": "Kriteria penerimaan", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "risks_open_questions", "section_title": "Risiko, Kebergantungan dan Soalan Terbuka", "sort_order": 15, "fields": [{"field_key": "risks_open_questions.items", "label": "Risiko dan soalan", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "completion_checklist", "section_title": "Senarai Semak Penyempurnaan", "sort_order": 16, "fields": [{"field_key": "completion_checklist.items", "label": "Senarai semak", "component": "table", "data_type": "array", "required": false}]}
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "template_id": "individual_chart_requirement_template_de",
+  "template_key": "individual_chart_requirement",
+  "template_name": "Vorlage fuer Einzelchart-Anforderungen",
+  "template_category": "business_requirement",
+  "business_domain": "data_visualization",
+  "language": "de",
+  "version": "1.0.0",
+  "status": "enabled",
+  "description": "Eine Vorlage fuer ein einzelnes Chart oder Dashboard-Element mit fachlichem Zweck, Datenvertrag, Chart-Spezifikation, Filtern, Detailtabelle, Interaktionen, Berechtigungen, Entwicklungsanforderungen und UAT.",
+  "tags": ["chart", "dashboard", "visualization", "data-contract", "uat"],
+  "applicable_scenarios": [
+    "Einzelnes Chart oder Dashboard-Element",
+    "Kennzahlenvisualisierung mit Filtern",
+    "Bestaetigung des Chart-Datenvertrags",
+    "Chart-Drill-down und Detailtabelle",
+    "Chart-Export und Berechtigungsregeln"
+  ],
+  "render_config": {"format": "markdown", "markdown_relative_path": "data/PRD_template/individual-chart-requirement-template.de.md"},
+  "storage_model": "structured_requirement_template.v1",
+  "sections": [
+    {"section_key": "document_info", "section_title": "Grundlegende Dokumentinformationen", "sort_order": 1, "fields": [{"field_key": "document_info.chart_name", "label": "Chart- / Seitenname", "component": "input", "data_type": "string", "required": true}]},
+    {"section_key": "background_objectives", "section_title": "Hintergrund und Ziele", "sort_order": 2, "fields": [{"field_key": "background_objectives.summary", "label": "Hintergrund und Ziele", "component": "textarea", "data_type": "string", "required": true}]},
+    {"section_key": "scope", "section_title": "Umfang", "sort_order": 3, "fields": [{"field_key": "scope.items", "label": "Umfang", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "stakeholders", "section_title": "Verantwortliche und Stakeholder", "sort_order": 4, "fields": [{"field_key": "stakeholders.roles", "label": "Stakeholder", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "data_description", "section_title": "Datenbeschreibung", "sort_order": 5, "fields": [{"field_key": "data_description.items", "label": "Datenquelle und Felder", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "chart_presentation", "section_title": "Seiten- und Chart-Darstellung", "sort_order": 6, "fields": [{"field_key": "chart_presentation.spec", "label": "Chart-Spezifikation", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "filters_detail", "section_title": "Filter und Detailtabelle", "sort_order": 7, "fields": [{"field_key": "filters_detail.items", "label": "Filter und Details", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "interactions_permissions", "section_title": "Interaktion, Berechtigungen und Export", "sort_order": 8, "fields": [{"field_key": "interactions_permissions.requirements", "label": "Interaktion und Berechtigungen", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "development", "section_title": "Entwicklungsanforderungen", "sort_order": 9, "fields": [{"field_key": "development.requirements", "label": "Entwicklung", "component": "list", "data_type": "array", "required": false}]},
+    {"section_key": "color_system", "section_title": "Farbsystem", "sort_order": 10, "fields": [{"field_key": "color_system.tokens", "label": "Farb-Tokens", "component": "table", "data_type": "array", "required": false}]},
+    {"section_key": "acceptance", "section_title": "Abnahmekriterien und UAT-Checkliste", "sort_order": 11, "fields": [{"field_key": "acceptance.criteria", "label": "Abnahmekriterien", "component": "table", "data_type": "array", "required": true}]},
+    {"section_key": "open_questions", "section_title": "Offene Fragen und Aenderungsprotokoll", "sort_order": 12, "fields": [{"field_key": "open_questions.questions", "label": "Offene Fragen", "component": "table", "data_type": "array", "required": false}]}
+  ]
+}

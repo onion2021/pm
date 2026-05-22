@@ -64,6 +64,10 @@ const loadingTemplateDetail = ref(false)
 const templateDialogError = ref('')
 const selectedBusinessTemplateId = ref('')
 const previewPanelOpen = ref(false)
+const documentGenerationConfirmOpen = ref(false)
+const documentGenerationConfirmMessage = ref('')
+const deleteSessionConfirmOpen = ref(false)
+const deleteSessionConfirmTargetId = ref('')
 const currentWorkspaceView = ref<'chat' | 'templates'>('chat')
 
 
@@ -500,6 +504,8 @@ const selectedBusinessTemplate = computed<BusinessTemplateDetail | null>(() => {
   }
   return businessTemplateDetails.value[templateId] ?? null
 })
+let documentGenerationConfirmResolver: ((confirmed: boolean) => void) | null = null
+let deleteSessionConfirmResolver: ((confirmed: boolean) => void) | null = null
 const languageOptions: Array<{ code: LanguageCode; label: string }> = [
   { code: 'en', label: 'English' },
   { code: 'de', label: 'Deutsch' },
@@ -651,6 +657,18 @@ const templateFacetLabels: Record<string, Record<LanguageCode, string>> = {
     de: 'Logistik und Lager',
     zh: '物流仓储',
     ms: 'Logistik dan Gudang',
+  },
+  business_process: {
+    en: 'Business Process',
+    de: 'Geschaeftsprozess',
+    zh: '业务流程',
+    ms: 'Proses Perniagaan',
+  },
+  data_visualization: {
+    en: 'Data Visualization',
+    de: 'Datenvisualisierung',
+    zh: '数据可视化',
+    ms: 'Visualisasi Data',
   },
 }
 const templateTagLabels: Record<string, Record<LanguageCode, string>> = {
@@ -869,6 +887,78 @@ const templateTagLabels: Record<string, Record<LanguageCode, string>> = {
     de: 'Sendung',
     zh: '配送',
     ms: 'Penghantaran',
+  },
+  'business-process': {
+    en: 'Business Process',
+    de: 'Geschaeftsprozess',
+    zh: '业务流程',
+    ms: 'Proses Perniagaan',
+  },
+  workflow: {
+    en: 'Workflow',
+    de: 'Workflow',
+    zh: '工作流',
+    ms: 'Workflow',
+  },
+  approval: {
+    en: 'Approval',
+    de: 'Genehmigung',
+    zh: '审批',
+    ms: 'Kelulusan',
+  },
+  permissions: {
+    en: 'Permissions',
+    de: 'Berechtigungen',
+    zh: '权限',
+    ms: 'Kebenaran',
+  },
+  audit: {
+    en: 'Audit',
+    de: 'Audit',
+    zh: '审计',
+    ms: 'Audit',
+  },
+  uat: {
+    en: 'UAT',
+    de: 'UAT',
+    zh: '用户验收测试',
+    ms: 'UAT',
+  },
+  chart: {
+    en: 'Chart',
+    de: 'Diagramm',
+    zh: '图表',
+    ms: 'Carta',
+  },
+  dashboard: {
+    en: 'Dashboard',
+    de: 'Dashboard',
+    zh: '看板',
+    ms: 'Dashboard',
+  },
+  visualization: {
+    en: 'Visualization',
+    de: 'Visualisierung',
+    zh: '可视化',
+    ms: 'Visualisasi',
+  },
+  'data-contract': {
+    en: 'Data Contract',
+    de: 'Datenvertrag',
+    zh: '数据契约',
+    ms: 'Kontrak Data',
+  },
+  'multiple-charts': {
+    en: 'Multiple Charts',
+    de: 'Mehrfachcharts',
+    zh: '多图表',
+    ms: 'Pelbagai Carta',
+  },
+  'drill-down': {
+    en: 'Drill-down',
+    de: 'Drill-down',
+    zh: '下钻',
+    ms: 'Drill-down',
   },
 }
 function selectLanguage(lang: LanguageCode) {
@@ -1333,6 +1423,48 @@ function buildDocumentGenerationConfirmMessage(): string {
   }
   return `Collection coverage is ${progress.collectionCoveragePercentage}% and confirmation progress is ${progress.confirmationPercentage}%. The generated documents will contain more assumptions. Continue anyway?`
 }
+
+function requestDocumentGenerationConfirm(): Promise<boolean> {
+  if (documentGenerationConfirmResolver) {
+    documentGenerationConfirmResolver(false)
+  }
+
+  documentGenerationConfirmMessage.value = buildDocumentGenerationConfirmMessage()
+  documentGenerationConfirmOpen.value = true
+
+  return new Promise((resolve) => {
+    documentGenerationConfirmResolver = resolve
+  })
+}
+
+function resolveDocumentGenerationConfirm(confirmed: boolean) {
+  documentGenerationConfirmOpen.value = false
+  documentGenerationConfirmMessage.value = ''
+  const resolver = documentGenerationConfirmResolver
+  documentGenerationConfirmResolver = null
+  resolver?.(confirmed)
+}
+
+function requestDeleteSessionConfirm(targetSessionId: string): Promise<boolean> {
+  if (deleteSessionConfirmResolver) {
+    deleteSessionConfirmResolver(false)
+  }
+
+  deleteSessionConfirmTargetId.value = targetSessionId
+  deleteSessionConfirmOpen.value = true
+
+  return new Promise((resolve) => {
+    deleteSessionConfirmResolver = resolve
+  })
+}
+
+function resolveDeleteSessionConfirm(confirmed: boolean) {
+  deleteSessionConfirmOpen.value = false
+  deleteSessionConfirmTargetId.value = ''
+  const resolver = deleteSessionConfirmResolver
+  deleteSessionConfirmResolver = null
+  resolver?.(confirmed)
+}
 async function loadStructuredRequirement(
   targetSessionId: string,
   options: { background?: boolean } = {},
@@ -1618,11 +1750,11 @@ async function selectSession(targetSessionId: string) {
 }
 
 async function deleteSession(targetSessionId: string) {
-  if (!targetSessionId || !canMutateHistory() || deletingSessionId.value) {
+  if (!targetSessionId || !canMutateHistory() || deletingSessionId.value || deleteSessionConfirmOpen.value) {
     return
   }
 
-  const confirmed = window.confirm(t.value.deleteSessionConfirm)
+  const confirmed = await requestDeleteSessionConfirm(targetSessionId)
   if (!confirmed) {
     return
   }
@@ -2096,12 +2228,18 @@ async function sendMessage() {
 }
 
 async function generateDocuments() {
-  if (!hasSession.value || generatingDocuments.value || messagePipelineActive.value || switchingSession.value) {
+  if (
+    !hasSession.value ||
+    generatingDocuments.value ||
+    documentGenerationConfirmOpen.value ||
+    messagePipelineActive.value ||
+    switchingSession.value
+  ) {
     return
   }
 
   if (!structuredRequirementProgress.value.readyToGenerate) {
-    const confirmed = window.confirm(buildDocumentGenerationConfirmMessage())
+    const confirmed = await requestDocumentGenerationConfirm()
     if (!confirmed) {
       return
     }
@@ -2456,7 +2594,7 @@ watch(messageRenderSignature, (signature, previousSignature) => {
                     type="button"
                     :title="t.deleteSession"
                     :aria-label="t.deleteSession"
-                    :disabled="!canMutateHistory() || deletingSessionId === session.session_id"
+                    :disabled="!canMutateHistory() || deleteSessionConfirmOpen || deletingSessionId === session.session_id"
                     @click="deleteSession(session.session_id)"
                   >
                     <svg class="session-card-delete-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2696,7 +2834,7 @@ watch(messageRenderSignature, (signature, previousSignature) => {
                 :syncing="syncingStructuredRequirement"
                 :generating-documents="generatingDocuments"
                 :opening-go-coding="openingGoCoding"
-                :generation-disabled="messagePipelineActive || switchingSession || !hasSession"
+                :generation-disabled="messagePipelineActive || switchingSession || documentGenerationConfirmOpen || !hasSession"
                 :has-prd-document="Boolean(latestPrdDocument)"
                 :has-design-document="Boolean(latestDesignDocument)"
                 :error="structuredRequirementError"
@@ -2839,6 +2977,84 @@ watch(messageRenderSignature, (signature, previousSignature) => {
           </button>
           <button class="btn btn-primary" type="button" :disabled="loadingTemplateDetail || Boolean(applyingTemplateId) || !selectedBusinessTemplate" @click="applyBusinessTemplate">
             {{ applyingTemplateId ? t.creating : t.templateApply }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      v-if="deleteSessionConfirmOpen"
+      class="template-dialog-backdrop"
+      @click.self="resolveDeleteSessionConfirm(false)"
+    >
+      <div class="template-dialog document-confirm-dialog" role="dialog" aria-modal="true" aria-label="AIPM">
+        <div class="template-dialog-head">
+          <div>
+            <p class="template-dialog-eyebrow">{{ t.deleteSession }}</p>
+            <h3>AIPM</h3>
+          </div>
+          <button
+            class="template-dialog-close"
+            type="button"
+            :aria-label="t.close"
+            @click="resolveDeleteSessionConfirm(false)"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="template-dialog-body">
+          <p class="document-confirm-message">{{ t.deleteSessionConfirm }}</p>
+        </div>
+
+        <div class="template-dialog-actions">
+          <button class="btn btn-secondary" type="button" @click="resolveDeleteSessionConfirm(false)">
+            {{ t.templateCancel }}
+          </button>
+          <button class="btn btn-danger" type="button" @click="resolveDeleteSessionConfirm(true)">
+            {{ t.delete }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      v-if="documentGenerationConfirmOpen"
+      class="template-dialog-backdrop"
+      @click.self="resolveDocumentGenerationConfirm(false)"
+    >
+      <div class="template-dialog document-confirm-dialog" role="dialog" aria-modal="true" aria-label="AIPM">
+        <div class="template-dialog-head">
+          <div>
+            <p class="template-dialog-eyebrow">{{ t.generatePrd }}</p>
+            <h3>AIPM</h3>
+          </div>
+          <button
+            class="template-dialog-close"
+            type="button"
+            :aria-label="t.close"
+            @click="resolveDocumentGenerationConfirm(false)"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="template-dialog-body">
+          <p class="document-confirm-message">{{ documentGenerationConfirmMessage }}</p>
+        </div>
+
+        <div class="template-dialog-actions">
+          <button class="btn btn-secondary" type="button" @click="resolveDocumentGenerationConfirm(false)">
+            {{ t.templateCancel }}
+          </button>
+          <button class="btn btn-primary" type="button" @click="resolveDocumentGenerationConfirm(true)">
+            {{ t.generatePrd }}
           </button>
         </div>
       </div>
@@ -4215,6 +4431,11 @@ body {
   box-shadow: inset 0 0 0 1px rgba(220, 229, 243, 0.92);
 }
 
+.btn-danger {
+  background: var(--warn);
+  box-shadow: 0 12px 22px rgba(194, 65, 59, 0.18);
+}
+
 .btn-icon {
   width: 46px;
   min-width: 46px;
@@ -4305,6 +4526,10 @@ body {
   overflow: hidden;
 }
 
+.document-confirm-dialog {
+  width: min(520px, 100%);
+}
+
 .template-dialog-head,
 .template-dialog-actions {
   display: flex;
@@ -4376,6 +4601,12 @@ body {
 
 .template-dialog-description {
   margin: 0;
+  line-height: 1.7;
+}
+
+.document-confirm-message {
+  margin: 0;
+  color: var(--ink);
   line-height: 1.7;
 }
 
@@ -4586,6 +4817,11 @@ body {
 .btn:hover:not(:disabled),
 .composer-send:hover:not(:disabled) {
   background: var(--accent-strong);
+  color: #ffffff;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #a73531;
 }
 
 .btn-secondary,
