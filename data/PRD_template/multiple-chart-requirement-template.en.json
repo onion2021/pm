@@ -301,5 +301,190 @@
         }
       ]
     }
-  ]
+  ],
+  "example_model": {
+    "document_info": {
+      "project_name": "Quality Operations Dashboard",
+      "requirement_name": "Multi-chart dashboard for quality operations"
+    },
+    "background": {
+      "summary": "Quality operations teams need a dashboard combining trend, Pareto, ranking, and detail charts. Existing reports are separated and cannot cross-filter.",
+      "objective": "Build a multi-chart dashboard with shared filters, linked interactions, drill-down, and exportable details."
+    },
+    "scope": {
+      "in_scope": [
+        "Shared filter area",
+        "KPI cards and trend chart",
+        "Defect Pareto chart",
+        "Product/line ranking chart",
+        "Linked detail table and export"
+      ],
+      "out_of_scope": [
+        "Real-time streaming alerts",
+        "Machine-learning root-cause recommendation",
+        "Mobile native app"
+      ]
+    },
+    "users_and_scenarios": {
+      "target_users": [
+        "Quality manager",
+        "Process engineer",
+        "Production supervisor",
+        "Data owner",
+        "Dashboard developer"
+      ],
+      "core_scenarios": [
+        "Manager checks daily quality KPIs.",
+        "Engineer selects a defect category and related charts update.",
+        "Supervisor exports affected lot details."
+      ]
+    },
+    "functional_requirements": {
+      "overview": "This default example includes Shared dashboard filters, Linked chart interactions, Detail drill-down and export.",
+      "feature_details": [
+        {
+          "feature_name": "Shared dashboard filters",
+          "description": "Support shared dashboard filters for the example business scenario.",
+          "trigger": "User opens the related workspace or submits the related business action.",
+          "processing_logic": "Validate required fields, apply permission rules, persist records, and update related status or metrics.",
+          "inputs": [
+            "Business master data",
+            "User filter or request data"
+          ],
+          "outputs": [
+            "Updated records",
+            "Visible status or chart result"
+          ],
+          "exception_cases": [
+            "Missing required data",
+            "Insufficient permission",
+            "Data refresh delay"
+          ]
+        },
+        {
+          "feature_name": "Linked chart interactions",
+          "description": "Support linked chart interactions for the example business scenario.",
+          "trigger": "User opens the related workspace or submits the related business action.",
+          "processing_logic": "Validate required fields, apply permission rules, persist records, and update related status or metrics.",
+          "inputs": [
+            "Business master data",
+            "User filter or request data"
+          ],
+          "outputs": [
+            "Updated records",
+            "Visible status or chart result"
+          ],
+          "exception_cases": [
+            "Missing required data",
+            "Insufficient permission",
+            "Data refresh delay"
+          ]
+        },
+        {
+          "feature_name": "Detail drill-down and export",
+          "description": "Support detail drill-down and export for the example business scenario.",
+          "trigger": "User opens the related workspace or submits the related business action.",
+          "processing_logic": "Validate required fields, apply permission rules, persist records, and update related status or metrics.",
+          "inputs": [
+            "Business master data",
+            "User filter or request data"
+          ],
+          "outputs": [
+            "Updated records",
+            "Visible status or chart result"
+          ],
+          "exception_cases": [
+            "Missing required data",
+            "Insufficient permission",
+            "Data refresh delay"
+          ]
+        }
+      ]
+    },
+    "business_rules": [
+      "Only authorized roles can view scoped data and perform sensitive actions.",
+      "Core business actions must keep an audit trail.",
+      "Exported data must follow the same filters and permission scope as the page.",
+      "Data refresh status and calculation definitions must be visible to users."
+    ],
+    "page_and_interaction": {
+      "pages": [
+        {
+          "page_name": "Shared dashboard filters",
+          "entry_point": "Main workspace",
+          "page_elements": [
+            "Filter area",
+            "Main content area",
+            "Detail area"
+          ],
+          "button_actions": [
+            "Search",
+            "Reset",
+            "Export",
+            "Open detail"
+          ]
+        },
+        {
+          "page_name": "Linked chart interactions",
+          "entry_point": "Main workspace",
+          "page_elements": [
+            "Filter area",
+            "Main content area",
+            "Detail area"
+          ],
+          "button_actions": [
+            "Search",
+            "Reset",
+            "Export",
+            "Open detail"
+          ]
+        },
+        {
+          "page_name": "Detail drill-down and export",
+          "entry_point": "Main workspace",
+          "page_elements": [
+            "Filter area",
+            "Main content area",
+            "Detail area"
+          ],
+          "button_actions": [
+            "Search",
+            "Reset",
+            "Export",
+            "Open detail"
+          ]
+        }
+      ],
+      "interaction_flow": [
+        "Manager checks daily quality KPIs.",
+        "Engineer selects a defect category and related charts update.",
+        "Supervisor exports affected lot details."
+      ]
+    },
+    "copywriting": [],
+    "data_and_dependencies": [
+      "User and organization master data",
+      "Business transaction data",
+      "Permission configuration",
+      "Reporting/export service"
+    ],
+    "risks_and_notes": [
+      "Metric ownership and data definitions must be confirmed.",
+      "Historical data quality may affect acceptance.",
+      "External system readiness may affect rollout scope."
+    ],
+    "acceptance_criteria": [
+      "The example scope can be generated into PRD and design documents.",
+      "Users can revise the seeded requirement through chat messages.",
+      "Main roles, flows, data, permissions, and acceptance criteria are represented."
+    ],
+    "open_questions": [
+      "Which roles need final approval authority?",
+      "Which fields and metrics are mandatory for MVP?",
+      "Which external systems must be integrated in the first release?"
+    ],
+    "template_meta": {
+      "example_note": "AI-generated default example business; replace with real business facts before final delivery."
+    }
+  }
 }

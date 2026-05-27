@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 import type { BusinessTemplateDetail, BusinessTemplateSummary } from './types/businessTemplate'
+import MarkdownRenderer from './components/MarkdownRenderer.vue'
 import RequirementMarkdownPreview from './components/RequirementMarkdownPreview.vue'
 import StructuredRequirementPanel from './components/StructuredRequirementPanel.vue'
 import { computeStructuredRequirementProgress } from './lib/structuredRequirementProgress'
@@ -152,6 +153,8 @@ const translations = {
     templateLibraryHint: 'Choose a business template to start a structured session faster.',
     templateOpen: 'View details',
     templateApply: 'Use this template',
+    templateApplyGuided: 'Guided start',
+    templateApplyExample: 'Start from example',
     templateCancel: 'Cancel',
     templateDetail: 'Template Details',
     templateScenarios: 'Applicable scenarios',
@@ -159,7 +162,7 @@ const translations = {
     templateSectionsShort: 'sections',
     templateTags: 'Tags',
     templateFieldCount: 'fields',
-    templateApplyHint: 'Confirming will start a new conversation with this business template.',
+    templateApplyHint: 'Use guided start to collect requirements section by section, or start from the example and revise it.',
     templatePromptManagedHint: 'A business template is active. Generic quick/expert prompting is disabled for this session.',
     templateSessionBadge: 'Template session',
     failedToLoadTemplates: 'Failed to load template library',
@@ -229,6 +232,8 @@ const translations = {
     templateLibraryHint: 'Waehle eine Fachvorlage, um schneller in eine strukturierte Sitzung zu starten.',
     templateOpen: 'Details ansehen',
     templateApply: 'Vorlage verwenden',
+    templateApplyGuided: 'Gefuehrt starten',
+    templateApplyExample: 'Mit Beispiel starten',
     templateCancel: 'Abbrechen',
     templateDetail: 'Vorlagendetails',
     templateScenarios: 'Geeignete Szenarien',
@@ -236,7 +241,7 @@ const translations = {
     templateSectionsShort: 'Abschnitte',
     templateTags: 'Tags',
     templateFieldCount: 'Felder',
-    templateApplyHint: 'Beim Bestaetigen wird eine neue Konversation mit dieser Fachvorlage gestartet.',
+    templateApplyHint: 'Gefuehrt starten sammelt Anforderungen Abschnitt fuer Abschnitt; mit Beispiel starten erzeugt eine vorbefuellte Sitzung.',
     templatePromptManagedHint: 'Diese Sitzung wird von einer Fachvorlage gesteuert. Die generischen Schnell/Experte-Prompts sind deaktiviert.',
     templateSessionBadge: 'Vorlagen-Sitzung',
     failedToLoadTemplates: 'Vorlagenbibliothek konnte nicht geladen werden',
@@ -306,6 +311,8 @@ const translations = {
     templateLibraryHint: '选择一个业务模板，更快开始结构化需求会话。',
     templateOpen: '查看详情',
     templateApply: '使用该模板',
+    templateApplyGuided: '引导式开始',
+    templateApplyExample: '填充式开始',
     templateCancel: '取消',
     templateDetail: '模板详情',
     templateScenarios: '适用场景',
@@ -313,7 +320,7 @@ const translations = {
     templateSectionsShort: '章节',
     templateTags: '标签',
     templateFieldCount: '个字段',
-    templateApplyHint: '确认后会新建一个基于该业务模板的会话。',
+    templateApplyHint: '可以引导式逐步采集，也可以基于示例业务先生成再修改。',
     templatePromptManagedHint: '当前会话已启用业务模板，通用的“快速/专家”提问策略已停用。',
     templateSessionBadge: '模板会话',
     failedToLoadTemplates: '加载模板库失败',
@@ -382,6 +389,8 @@ const translations = {
     templateLibraryHint: 'Pilih templat perniagaan untuk memulakan sesi berstruktur dengan lebih pantas.',
     templateOpen: 'Lihat butiran',
     templateApply: 'Guna templat ini',
+    templateApplyGuided: 'Mula berpandu',
+    templateApplyExample: 'Mula daripada contoh',
     templateCancel: 'Batal',
     templateDetail: 'Butiran Templat',
     templateScenarios: 'Senario sesuai',
@@ -389,7 +398,7 @@ const translations = {
     templateSectionsShort: 'bahagian',
     templateTags: 'Tag',
     templateFieldCount: 'medan',
-    templateApplyHint: 'Pengesahan akan memulakan perbualan baharu menggunakan templat perniagaan ini.',
+    templateApplyHint: 'Mula berpandu mengumpul keperluan langkah demi langkah; mula daripada contoh mencipta sesi yang telah diisi.',
     templatePromptManagedHint: 'Sesi ini dikawal oleh templat perniagaan. Mod prompt umum Pantas/Pakar dimatikan.',
     templateSessionBadge: 'Sesi templat',
     failedToLoadTemplates: 'Gagal memuatkan pustaka templat',
@@ -1568,7 +1577,7 @@ async function syncCurrentSessionDetail(targetSessionId: string) {
   }
 }
 
-async function createSession(options: { templateId?: string } = {}) {
+async function createSession(options: { templateId?: string; templateStartMode?: 'guided' | 'example' } = {}) {
   if (messagePipelineActive.value || generatingDocuments.value || loadingSession.value) {
     return
   }
@@ -1583,6 +1592,7 @@ async function createSession(options: { templateId?: string } = {}) {
       body: JSON.stringify({
         language: currentLanguage.value,
         ...(options.templateId ? { template_id: options.templateId } : {}),
+        ...(options.templateStartMode ? { template_start_mode: options.templateStartMode } : {}),
       }),
     })
 
@@ -1662,7 +1672,10 @@ function closeBusinessTemplateDialog() {
   selectedBusinessTemplateId.value = ''
 }
 
-async function launchBusinessTemplateSession(templateId: string, options: { closeDialog?: boolean } = {}) {
+async function launchBusinessTemplateSession(
+  templateId: string,
+  options: { closeDialog?: boolean; startMode?: 'guided' | 'example' } = {},
+) {
   if (
     !templateId ||
     applyingTemplateId.value ||
@@ -1679,7 +1692,10 @@ async function launchBusinessTemplateSession(templateId: string, options: { clos
   templateDialogError.value = ''
 
   try {
-    const created = await createSession({ templateId })
+    const created = await createSession({
+      templateId,
+      templateStartMode: options.startMode ?? 'guided',
+    })
     if (created) {
       currentWorkspaceView.value = 'chat'
       if (options.closeDialog) {
@@ -1707,6 +1723,23 @@ async function applyBusinessTemplate() {
     return
   }
   await launchBusinessTemplateSession(detail.template_id, { closeDialog: true })
+}
+
+async function applyBusinessTemplateExample() {
+  const detail = selectedBusinessTemplate.value
+  if (
+    !detail ||
+    !detail.has_example_model ||
+    applyingTemplateId.value ||
+    loadingSession.value ||
+    switchingSession.value ||
+    deletingSessionId.value ||
+    messagePipelineActive.value ||
+    generatingDocuments.value
+  ) {
+    return
+  }
+  await launchBusinessTemplateSession(detail.template_id, { closeDialog: true, startMode: 'example' })
 }
 
 async function updatePromptTemplate(template: PromptTemplate) {
@@ -1834,15 +1867,38 @@ function splitSseBlocks(rawBuffer: string): { blocks: string[]; rest: string } {
 }
 
 function createSmoothWriter(target: ChatMessage) {
+  let pending = ''
+  let scheduled = false
+
+  const flush = () => {
+    if (!pending) {
+      scheduled = false
+      return
+    }
+    target.content += pending
+    pending = ''
+    scheduled = false
+    scrollToBottom()
+  }
+
+  const scheduleFlush = () => {
+    if (scheduled) {
+      return
+    }
+    scheduled = true
+    window.requestAnimationFrame(flush)
+  }
+
   return {
     push(chunk: string) {
       if (!chunk) {
         return
       }
-      target.content += chunk
-      scrollToBottom()
+      pending += chunk
+      scheduleFlush()
     },
     async finish() {
+      flush()
       scrollToBottom()
     },
   }
@@ -1990,6 +2046,7 @@ function createGeneratedDocumentMessage(kind: NonNullable<ChatMessage['kind']>):
     thinking: '',
     createdAt: new Date().toISOString(),
     kind,
+    streaming: true,
   }
 }
 
@@ -2137,6 +2194,11 @@ function appendReactiveMessage(message: ChatMessage): ChatMessage {
   return messages.value[messages.value.length - 1] as ChatMessage
 }
 
+function finishGeneratedDocumentMessage(message: ChatMessage) {
+  finalizeGeneratedDocumentContent(message)
+  message.streaming = false
+}
+
 function autoResizeTextarea() {
   const textarea = textareaRef.value
   if (textarea) {
@@ -2254,10 +2316,10 @@ async function generateDocuments() {
     scrollToBottom()
 
     await sendPrdDocStream(sessionId.value, prdMessage, currentLanguage.value)
-    finalizeGeneratedDocumentContent(prdMessage)
+    finishGeneratedDocumentMessage(prdMessage)
     if (!prdMessage.content.trim()) {
       await sendPrdDocFallback(sessionId.value, prdMessage, currentLanguage.value)
-      finalizeGeneratedDocumentContent(prdMessage)
+      finishGeneratedDocumentMessage(prdMessage)
     }
     shouldRefreshHistory = true
 
@@ -2265,10 +2327,10 @@ async function generateDocuments() {
     scrollToBottom()
 
     await sendDesignDocStream(sessionId.value, designMessage, currentLanguage.value)
-    finalizeGeneratedDocumentContent(designMessage)
+    finishGeneratedDocumentMessage(designMessage)
     if (!designMessage.content.trim()) {
       await sendDesignDocFallback(sessionId.value, designMessage, currentLanguage.value)
-      finalizeGeneratedDocumentContent(designMessage)
+      finishGeneratedDocumentMessage(designMessage)
     }
     shouldRefreshHistory = true
   } catch (error) {
@@ -2276,6 +2338,8 @@ async function generateDocuments() {
     const last = messages.value[messages.value.length - 1]
     if (last && last.role === 'assistant' && !last.content) {
       messages.value.pop()
+    } else if (last && isGeneratedDocumentMessage(last)) {
+      last.streaming = false
     }
   } finally {
     if (shouldRefreshHistory) {
@@ -2715,7 +2779,8 @@ watch(messageRenderSignature, (signature, previousSignature) => {
                     <div class="design-doc-toolbar">
                       <span class="design-doc-badge">{{ documentBadgeLabel(msg) }}</span>
                     </div>
-                    <pre class="content design-doc-content">{{ msg.content }}</pre>
+                    <pre v-if="msg.streaming" class="content design-doc-content streaming-doc-content">{{ msg.content }}</pre>
+                    <MarkdownRenderer v-else class="content design-doc-content" :source="msg.content" />
                     <div v-if="msg.downloadUrl" class="design-doc-footer">
                       <button
                         class="btn btn-secondary design-doc-download"
@@ -2902,9 +2967,18 @@ watch(messageRenderSignature, (signature, previousSignature) => {
                     class="btn template-page-apply-btn"
                     type="button"
                     :disabled="loadingSession || messagePipelineActive || generatingDocuments || Boolean(applyingTemplateId)"
-                    @click="launchBusinessTemplateSession(templateItem.template_id)"
+                    @click="launchBusinessTemplateSession(templateItem.template_id, { startMode: 'guided' })"
                   >
-                    {{ applyingTemplateId === templateItem.template_id ? t.creating : t.templateApply }}
+                    {{ applyingTemplateId === templateItem.template_id ? t.creating : t.templateApplyGuided }}
+                  </button>
+                  <button
+                    v-if="templateItem.has_example_model"
+                    class="btn template-page-apply-btn"
+                    type="button"
+                    :disabled="loadingSession || messagePipelineActive || generatingDocuments || Boolean(applyingTemplateId)"
+                    @click="launchBusinessTemplateSession(templateItem.template_id, { startMode: 'example' })"
+                  >
+                    {{ applyingTemplateId === templateItem.template_id ? t.creating : t.templateApplyExample }}
                   </button>
                 </div>
               </article>
@@ -2938,31 +3012,19 @@ watch(messageRenderSignature, (signature, previousSignature) => {
         <div v-else-if="templateDialogError" class="template-dialog-state error">
           {{ templateDialogError }}
         </div>
-        <div v-else-if="selectedBusinessTemplate" class="template-dialog-body">
-          <p class="template-dialog-description">{{ selectedBusinessTemplate.description }}</p>
-
-          <div v-if="selectedBusinessTemplate.tags.length" class="template-dialog-block">
-            <h4>{{ t.templateTags }}</h4>
-            <div class="template-dialog-tags">
-              <span v-for="tag in selectedBusinessTemplate.tags" :key="tag" class="template-dialog-tag">{{ formatTemplateTag(tag) }}</span>
-            </div>
+        <div v-else-if="selectedBusinessTemplate" class="template-dialog-body template-markdown-dialog-body">
+          <div v-if="selectedBusinessTemplate.tags.length" class="template-dialog-tags compact">
+            <span v-for="tag in selectedBusinessTemplate.tags" :key="tag" class="template-dialog-tag">{{ formatTemplateTag(tag) }}</span>
           </div>
 
-          <div v-if="selectedBusinessTemplate.applicable_scenarios.length" class="template-dialog-block">
-            <h4>{{ t.templateScenarios }}</h4>
-            <ul class="template-dialog-list">
-              <li v-for="scenario in selectedBusinessTemplate.applicable_scenarios" :key="scenario">{{ scenario }}</li>
-            </ul>
-          </div>
+          <MarkdownRenderer
+            v-if="selectedBusinessTemplate.template_markdown"
+            class="template-markdown-preview"
+            :source="selectedBusinessTemplate.template_markdown"
+          />
 
-          <div v-if="selectedBusinessTemplate.sections.length" class="template-dialog-block">
-            <h4>{{ t.templateSections }}</h4>
-            <ul class="template-dialog-list">
-              <li v-for="section in selectedBusinessTemplate.sections" :key="section.section_key">
-                <strong>{{ section.section_title }}</strong>
-                <span class="template-dialog-field-count">{{ section.field_count }} {{ t.templateFieldCount }}</span>
-              </li>
-            </ul>
+          <div v-else class="template-dialog-state">
+            {{ selectedBusinessTemplate.description }}
           </div>
 
           <div class="template-dialog-note">
@@ -2976,7 +3038,16 @@ watch(messageRenderSignature, (signature, previousSignature) => {
             {{ t.templateCancel }}
           </button>
           <button class="btn btn-primary" type="button" :disabled="loadingTemplateDetail || Boolean(applyingTemplateId) || !selectedBusinessTemplate" @click="applyBusinessTemplate">
-            {{ applyingTemplateId ? t.creating : t.templateApply }}
+            {{ applyingTemplateId ? t.creating : t.templateApplyGuided }}
+          </button>
+          <button
+            v-if="selectedBusinessTemplate?.has_example_model"
+            class="btn btn-primary"
+            type="button"
+            :disabled="loadingTemplateDetail || Boolean(applyingTemplateId) || !selectedBusinessTemplate"
+            @click="applyBusinessTemplateExample"
+          >
+            {{ applyingTemplateId ? t.creating : t.templateApplyExample }}
           </button>
         </div>
       </div>
@@ -4244,8 +4315,22 @@ body {
   border-radius: var(--radius-md);
   border: 1px solid #e2e8f5;
   background: #f7faff;
-  font-family: var(--mono);
   font-size: 0.84rem;
+}
+
+.think-content {
+  font-family: var(--mono);
+}
+
+.design-doc-content {
+  white-space: normal;
+}
+
+.streaming-doc-content {
+  max-height: 56vh;
+  overflow: auto;
+  white-space: pre-wrap;
+  font-family: var(--mono);
 }
 
 .design-doc-footer {
@@ -4599,6 +4684,10 @@ body {
   gap: 18px;
 }
 
+.template-markdown-dialog-body {
+  gap: 14px;
+}
+
 .template-dialog-description {
   margin: 0;
   line-height: 1.7;
@@ -4626,6 +4715,10 @@ body {
   gap: 8px;
 }
 
+.template-dialog-tags.compact {
+  gap: 6px;
+}
+
 .template-dialog-tag {
   padding: 7px 12px;
   border-radius: 999px;
@@ -4633,6 +4726,14 @@ body {
   color: #4b6ba4;
   font-size: 0.78rem;
   font-weight: 700;
+}
+
+.template-markdown-preview {
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: #fbfdfe;
+  color: var(--ink);
 }
 
 .template-dialog-list {

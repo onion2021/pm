@@ -341,5 +341,190 @@
         }
       ]
     }
-  ]
+  ],
+  "example_model": {
+    "document_info": {
+      "project_name": "ABF Yield Analysis Dashboard",
+      "requirement_name": "ABF manufacturing yield loss analysis"
+    },
+    "background": {
+      "summary": "ABF yield data is split across MES, QMS, inspection, and equipment systems. Quality and process teams need a unified view to identify yield loss by lot, panel, product, process step, equipment, and defect reason.",
+      "objective": "Build a yield analysis workspace that standardizes yield definitions, exposes loss drivers, supports drill-down, and tracks abnormal closure."
+    },
+    "scope": {
+      "in_scope": [
+        "Yield KPI dashboard",
+        "Lot, panel, product, and process-step analysis",
+        "Defect Pareto and root-cause drill-down",
+        "Abnormal yield alerts and closure tracking",
+        "Data contract and UAT reconciliation"
+      ],
+      "out_of_scope": [
+        "Equipment maintenance execution",
+        "Recipe optimization automation",
+        "Advanced statistical modeling"
+      ]
+    },
+    "users_and_scenarios": {
+      "target_users": [
+        "Quality engineer",
+        "Process engineer",
+        "Manufacturing supervisor",
+        "Product owner",
+        "Data engineer"
+      ],
+      "core_scenarios": [
+        "Engineer reviews yield trend by product and process step.",
+        "User drills into a low-yield lot and checks defect Pareto.",
+        "Process owner creates an abnormal closure action."
+      ]
+    },
+    "functional_requirements": {
+      "overview": "This default example includes Yield KPI and trend, Defect Pareto drill-down, Abnormal closure tracking.",
+      "feature_details": [
+        {
+          "feature_name": "Yield KPI and trend",
+          "description": "Support yield kpi and trend for the example business scenario.",
+          "trigger": "User opens the related workspace or submits the related business action.",
+          "processing_logic": "Validate required fields, apply permission rules, persist records, and update related status or metrics.",
+          "inputs": [
+            "Business master data",
+            "User filter or request data"
+          ],
+          "outputs": [
+            "Updated records",
+            "Visible status or chart result"
+          ],
+          "exception_cases": [
+            "Missing required data",
+            "Insufficient permission",
+            "Data refresh delay"
+          ]
+        },
+        {
+          "feature_name": "Defect Pareto drill-down",
+          "description": "Support defect pareto drill-down for the example business scenario.",
+          "trigger": "User opens the related workspace or submits the related business action.",
+          "processing_logic": "Validate required fields, apply permission rules, persist records, and update related status or metrics.",
+          "inputs": [
+            "Business master data",
+            "User filter or request data"
+          ],
+          "outputs": [
+            "Updated records",
+            "Visible status or chart result"
+          ],
+          "exception_cases": [
+            "Missing required data",
+            "Insufficient permission",
+            "Data refresh delay"
+          ]
+        },
+        {
+          "feature_name": "Abnormal closure tracking",
+          "description": "Support abnormal closure tracking for the example business scenario.",
+          "trigger": "User opens the related workspace or submits the related business action.",
+          "processing_logic": "Validate required fields, apply permission rules, persist records, and update related status or metrics.",
+          "inputs": [
+            "Business master data",
+            "User filter or request data"
+          ],
+          "outputs": [
+            "Updated records",
+            "Visible status or chart result"
+          ],
+          "exception_cases": [
+            "Missing required data",
+            "Insufficient permission",
+            "Data refresh delay"
+          ]
+        }
+      ]
+    },
+    "business_rules": [
+      "Only authorized roles can view scoped data and perform sensitive actions.",
+      "Core business actions must keep an audit trail.",
+      "Exported data must follow the same filters and permission scope as the page.",
+      "Data refresh status and calculation definitions must be visible to users."
+    ],
+    "page_and_interaction": {
+      "pages": [
+        {
+          "page_name": "Yield KPI and trend",
+          "entry_point": "Main workspace",
+          "page_elements": [
+            "Filter area",
+            "Main content area",
+            "Detail area"
+          ],
+          "button_actions": [
+            "Search",
+            "Reset",
+            "Export",
+            "Open detail"
+          ]
+        },
+        {
+          "page_name": "Defect Pareto drill-down",
+          "entry_point": "Main workspace",
+          "page_elements": [
+            "Filter area",
+            "Main content area",
+            "Detail area"
+          ],
+          "button_actions": [
+            "Search",
+            "Reset",
+            "Export",
+            "Open detail"
+          ]
+        },
+        {
+          "page_name": "Abnormal closure tracking",
+          "entry_point": "Main workspace",
+          "page_elements": [
+            "Filter area",
+            "Main content area",
+            "Detail area"
+          ],
+          "button_actions": [
+            "Search",
+            "Reset",
+            "Export",
+            "Open detail"
+          ]
+        }
+      ],
+      "interaction_flow": [
+        "Engineer reviews yield trend by product and process step.",
+        "User drills into a low-yield lot and checks defect Pareto.",
+        "Process owner creates an abnormal closure action."
+      ]
+    },
+    "copywriting": [],
+    "data_and_dependencies": [
+      "User and organization master data",
+      "Business transaction data",
+      "Permission configuration",
+      "Reporting/export service"
+    ],
+    "risks_and_notes": [
+      "Metric ownership and data definitions must be confirmed.",
+      "Historical data quality may affect acceptance.",
+      "External system readiness may affect rollout scope."
+    ],
+    "acceptance_criteria": [
+      "The example scope can be generated into PRD and design documents.",
+      "Users can revise the seeded requirement through chat messages.",
+      "Main roles, flows, data, permissions, and acceptance criteria are represented."
+    ],
+    "open_questions": [
+      "Which roles need final approval authority?",
+      "Which fields and metrics are mandatory for MVP?",
+      "Which external systems must be integrated in the first release?"
+    ],
+    "template_meta": {
+      "example_note": "AI-generated default example business; replace with real business facts before final delivery."
+    }
+  }
 }

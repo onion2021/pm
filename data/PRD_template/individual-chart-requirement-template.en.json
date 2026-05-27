@@ -264,5 +264,190 @@
         }
       ]
     }
-  ]
+  ],
+  "example_model": {
+    "document_info": {
+      "project_name": "Monthly Defect Rate Chart",
+      "requirement_name": "Single chart for monthly defect-rate monitoring"
+    },
+    "background": {
+      "summary": "Quality managers need one trusted chart to monitor monthly defect rate by plant, product family, and defect category. Current reports are manually prepared and definitions are inconsistent.",
+      "objective": "Deliver a single interactive chart with confirmed data contract, filters, detail table, export, and permission rules."
+    },
+    "scope": {
+      "in_scope": [
+        "One defect-rate trend chart",
+        "Plant/product/date filters",
+        "Detail table and export",
+        "Tooltip and drill-down interaction",
+        "Data refresh and permission rules"
+      ],
+      "out_of_scope": [
+        "Full dashboard suite",
+        "Predictive defect modeling",
+        "Data warehouse redesign"
+      ]
+    },
+    "users_and_scenarios": {
+      "target_users": [
+        "Quality manager",
+        "Process engineer",
+        "Data owner",
+        "Dashboard developer",
+        "QA tester"
+      ],
+      "core_scenarios": [
+        "User filters by plant and month.",
+        "User hovers over a point to see numerator and denominator.",
+        "User clicks a month to inspect detail records."
+      ]
+    },
+    "functional_requirements": {
+      "overview": "This default example includes Chart rendering, Filter and detail table, Export and permission control.",
+      "feature_details": [
+        {
+          "feature_name": "Chart rendering",
+          "description": "Support chart rendering for the example business scenario.",
+          "trigger": "User opens the related workspace or submits the related business action.",
+          "processing_logic": "Validate required fields, apply permission rules, persist records, and update related status or metrics.",
+          "inputs": [
+            "Business master data",
+            "User filter or request data"
+          ],
+          "outputs": [
+            "Updated records",
+            "Visible status or chart result"
+          ],
+          "exception_cases": [
+            "Missing required data",
+            "Insufficient permission",
+            "Data refresh delay"
+          ]
+        },
+        {
+          "feature_name": "Filter and detail table",
+          "description": "Support filter and detail table for the example business scenario.",
+          "trigger": "User opens the related workspace or submits the related business action.",
+          "processing_logic": "Validate required fields, apply permission rules, persist records, and update related status or metrics.",
+          "inputs": [
+            "Business master data",
+            "User filter or request data"
+          ],
+          "outputs": [
+            "Updated records",
+            "Visible status or chart result"
+          ],
+          "exception_cases": [
+            "Missing required data",
+            "Insufficient permission",
+            "Data refresh delay"
+          ]
+        },
+        {
+          "feature_name": "Export and permission control",
+          "description": "Support export and permission control for the example business scenario.",
+          "trigger": "User opens the related workspace or submits the related business action.",
+          "processing_logic": "Validate required fields, apply permission rules, persist records, and update related status or metrics.",
+          "inputs": [
+            "Business master data",
+            "User filter or request data"
+          ],
+          "outputs": [
+            "Updated records",
+            "Visible status or chart result"
+          ],
+          "exception_cases": [
+            "Missing required data",
+            "Insufficient permission",
+            "Data refresh delay"
+          ]
+        }
+      ]
+    },
+    "business_rules": [
+      "Only authorized roles can view scoped data and perform sensitive actions.",
+      "Core business actions must keep an audit trail.",
+      "Exported data must follow the same filters and permission scope as the page.",
+      "Data refresh status and calculation definitions must be visible to users."
+    ],
+    "page_and_interaction": {
+      "pages": [
+        {
+          "page_name": "Chart rendering",
+          "entry_point": "Main workspace",
+          "page_elements": [
+            "Filter area",
+            "Main content area",
+            "Detail area"
+          ],
+          "button_actions": [
+            "Search",
+            "Reset",
+            "Export",
+            "Open detail"
+          ]
+        },
+        {
+          "page_name": "Filter and detail table",
+          "entry_point": "Main workspace",
+          "page_elements": [
+            "Filter area",
+            "Main content area",
+            "Detail area"
+          ],
+          "button_actions": [
+            "Search",
+            "Reset",
+            "Export",
+            "Open detail"
+          ]
+        },
+        {
+          "page_name": "Export and permission control",
+          "entry_point": "Main workspace",
+          "page_elements": [
+            "Filter area",
+            "Main content area",
+            "Detail area"
+          ],
+          "button_actions": [
+            "Search",
+            "Reset",
+            "Export",
+            "Open detail"
+          ]
+        }
+      ],
+      "interaction_flow": [
+        "User filters by plant and month.",
+        "User hovers over a point to see numerator and denominator.",
+        "User clicks a month to inspect detail records."
+      ]
+    },
+    "copywriting": [],
+    "data_and_dependencies": [
+      "User and organization master data",
+      "Business transaction data",
+      "Permission configuration",
+      "Reporting/export service"
+    ],
+    "risks_and_notes": [
+      "Metric ownership and data definitions must be confirmed.",
+      "Historical data quality may affect acceptance.",
+      "External system readiness may affect rollout scope."
+    ],
+    "acceptance_criteria": [
+      "The example scope can be generated into PRD and design documents.",
+      "Users can revise the seeded requirement through chat messages.",
+      "Main roles, flows, data, permissions, and acceptance criteria are represented."
+    ],
+    "open_questions": [
+      "Which roles need final approval authority?",
+      "Which fields and metrics are mandatory for MVP?",
+      "Which external systems must be integrated in the first release?"
+    ],
+    "template_meta": {
+      "example_note": "AI-generated default example business; replace with real business facts before final delivery."
+    }
+  }
 }
